@@ -12,6 +12,7 @@ One tidy Blender add-on containing FaxCorp utility tools.
 | Align UV Islands by Longest Edge | UV | Rotates each UV island so its longest UV edge becomes horizontal. |
 | Clear Split Normals | Mesh | Clears custom split normals on selected mesh objects. |
 | Layout Objects | Object | Places selected objects end-to-end along X, Y, or Z with a configurable gap. |
+| Set Pivot | Object | Moves selected mesh object pivots to local min, middle, max, or kept axis positions. |
 | Rename by Collection | Naming | Renames selected objects from their first collection name. |
 
 ## Install In Blender
@@ -20,7 +21,7 @@ One tidy Blender add-on containing FaxCorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.1.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.2.zip`.
 6. Enable `FaxCorp Blender Tools`.
 
 ## Usage
@@ -39,6 +40,7 @@ Every shortcut is optional and disabled by default. In the add-on preferences, s
 - Rename to Material
 - Rename by Collection
 - Layout Objects
+- Set Pivot
 - Clear Split Normals
 - Align UV Islands
 
@@ -51,6 +53,14 @@ The key field expects Blender key event names such as `C`, `X`, `F5`, `SPACE`, o
 - `Y-`, `Y+`, `Z-`, and `Z+` follow the same pattern.
 - Clipping uses each object's local origin and local axes.
 
+## Set Pivot Behavior
+
+- Works on all selected mesh objects.
+- Defaults to X `Middle`, Y `Middle`, and Z `Min`.
+- Each axis can be set to `Min`, `Middle`, `Max`, or `Keep`.
+- Settings are saved on the scene and persist in `.blend` files.
+- The object origin moves while visible mesh geometry stays in place.
+
 ## Packaging
 
 Run this from the repo root:
@@ -62,7 +72,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.1.zip
+dist/faxcorp_blender_tools-1.0.2.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.

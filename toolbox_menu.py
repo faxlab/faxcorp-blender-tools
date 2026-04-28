@@ -8,6 +8,7 @@ from . import (
     layout_objects,
     rename_by_collection,
     rename_to_material,
+    set_pivot,
 )
 from .constants import TOOLBOX_MENU_IDNAME
 from .utils import register_classes, unregister_classes
@@ -34,6 +35,7 @@ class VIEW3D_MT_faxcorp_tools(Menu):
             layout_objects.OBJECT_OT_faxcorp_pack_on_axis.bl_idname,
             icon="EMPTY_ARROWS",
         )
+        layout.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
         layout.operator(
             clear_custom_normals.MESH_OT_faxcorp_clear_split_normals.bl_idname,
             icon="NORMALS_VERTEX",

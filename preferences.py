@@ -12,6 +12,7 @@ SHORTCUT_ROWS = (
     ("rename_material", "Rename to Material"),
     ("rename_collection", "Rename by Collection"),
     ("layout_objects", "Layout Objects"),
+    ("set_pivot", "Set Pivot"),
     ("clear_normals", "Clear Split Normals"),
     ("align_uv", "Align UV Islands"),
 )
@@ -59,16 +60,15 @@ def shortcut_label(prefs, prefix):
 
 
 def draw_shortcut(layout, prefs, prefix, label):
-    box = layout.box()
-    box.label(text=f"{label}: {shortcut_label(prefs, prefix)}")
+    split = layout.split(factor=0.28, align=True)
+    split.label(text=label)
 
-    row = box.row(align=True)
-    row.prop(prefs, f"{prefix}_shortcut_ctrl", toggle=True)
-    row.prop(prefs, f"{prefix}_shortcut_shift", toggle=True)
-    row.prop(prefs, f"{prefix}_shortcut_alt", toggle=True)
-    row.prop(prefs, f"{prefix}_shortcut_oskey", toggle=True)
-
-    box.prop(prefs, f"{prefix}_shortcut_key", text="Key")
+    row = split.row(align=True)
+    row.prop(prefs, f"{prefix}_shortcut_key", text="")
+    row.prop(prefs, f"{prefix}_shortcut_ctrl", text="Ctrl", toggle=True)
+    row.prop(prefs, f"{prefix}_shortcut_shift", text="Shift", toggle=True)
+    row.prop(prefs, f"{prefix}_shortcut_alt", text="Alt", toggle=True)
+    row.prop(prefs, f"{prefix}_shortcut_oskey", text="OS", toggle=True)
 
 
 class FAXCORP_AddonPreferences(AddonPreferences):
@@ -104,6 +104,12 @@ class FAXCORP_AddonPreferences(AddonPreferences):
     layout_objects_shortcut_alt: modifier_property("Alt")
     layout_objects_shortcut_oskey: modifier_property("OSKey")
 
+    set_pivot_shortcut_key: key_property("Set Pivot")
+    set_pivot_shortcut_ctrl: modifier_property("Ctrl")
+    set_pivot_shortcut_shift: modifier_property("Shift")
+    set_pivot_shortcut_alt: modifier_property("Alt")
+    set_pivot_shortcut_oskey: modifier_property("OSKey")
+
     clear_normals_shortcut_key: key_property("Clear Split Normals")
     clear_normals_shortcut_ctrl: modifier_property("Ctrl")
     clear_normals_shortcut_shift: modifier_property("Shift")
@@ -120,6 +126,7 @@ class FAXCORP_AddonPreferences(AddonPreferences):
         layout = self.layout
         layout.label(text="Shortcuts")
         layout.label(text="Leave the key field blank to disable a shortcut.")
+        layout.separator()
 
         for prefix, label in SHORTCUT_ROWS:
             draw_shortcut(layout, self, prefix, label)

@@ -8,6 +8,7 @@ from . import (
     layout_objects,
     rename_by_collection,
     rename_to_material,
+    set_pivot,
     toolbox_menu,
 )
 from .constants import SIDEBAR_CATEGORY
@@ -49,6 +50,20 @@ class FAXCORP_PT_object_layout_tools(FAXCORP_PT_tools_base, Panel):
         layout.operator(layout_objects.OBJECT_OT_faxcorp_pack_on_axis.bl_idname)
 
 
+class FAXCORP_PT_set_pivot_tools(FAXCORP_PT_tools_base, Panel):
+    bl_label = "Set Pivot"
+    bl_idname = "FAXCORP_PT_set_pivot_tools"
+
+    def draw(self, context):
+        layout = self.layout
+        settings = context.scene.faxcorp_set_pivot_settings
+        row = layout.row(align=True)
+        row.prop(settings, "x_mode", text="X")
+        row.prop(settings, "y_mode", text="Y")
+        row.prop(settings, "z_mode", text="Z")
+        layout.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
+
+
 class FAXCORP_PT_uv_tools(FAXCORP_PT_tools_base, Panel):
     bl_label = "UV"
     bl_idname = "FAXCORP_PT_uv_tools"
@@ -79,6 +94,7 @@ class FAXCORP_PT_naming_tools(FAXCORP_PT_tools_base, Panel):
 classes = (
     FAXCORP_PT_mesh_tools,
     FAXCORP_PT_object_layout_tools,
+    FAXCORP_PT_set_pivot_tools,
     FAXCORP_PT_uv_tools,
     FAXCORP_PT_naming_tools,
 )
