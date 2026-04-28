@@ -1,10 +1,10 @@
 bl_info = {
     "name": "FaxCorp Blender Tools",
-    "author": "faxlab3d",
+    "author": "faxcorp",
     "version": (1, 0, 0),
     "blender": (5, 1, 1),
-    "location": "View3D > Sidebar > FaxLab Tools",
-    "description": "A tidy toolbox of FaxLab Blender utilities",
+    "location": "View3D > Sidebar > FaxCorp Tools",
+    "description": "A tidy toolbox of FaxCorp Blender utilities",
     "category": "3D View",
 }
 
@@ -17,6 +17,8 @@ from . import (
     preferences,
     rename_by_collection,
     rename_to_material,
+    shortcuts,
+    toolbox_menu,
 )
 
 
@@ -28,7 +30,9 @@ modules = (
     clear_custom_normals,
     layout_objects,
     rename_by_collection,
+    toolbox_menu,
     panels,
+    shortcuts,
 )
 
 

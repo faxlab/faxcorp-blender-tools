@@ -1,12 +1,13 @@
 # FaxCorp Blender Tools
 
-One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
+One tidy Blender add-on containing FaxCorp utility tools.
 
 ## Tools
 
 | Tool | Area | What it does |
 | --- | --- | --- |
-| Axis Mesh Clipper | Mesh | Opens a shortcut menu for clipping selected meshes by local axis. Default shortcut: `Ctrl+Shift+C`. |
+| All FaxCorp Tools | Menu | Opens one menu containing every tool in the suite. |
+| Axis Mesh Clipper | Mesh | Opens a menu for clipping selected meshes by local axis. |
 | Rename to Material | Naming | Renames selected mesh objects from their material names, with optional split-by-material behavior. |
 | Align UV Islands by Longest Edge | UV | Rotates each UV island so its longest UV edge becomes horizontal. |
 | Clear Split Normals | Mesh | Clears custom split normals on selected mesh objects. |
@@ -24,9 +25,24 @@ One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
 
 ## Usage
 
-- Open the 3D View sidebar and use the `FaxLab Tools` tab.
+- Open the 3D View sidebar and use the `FaxCorp Tools` tab.
+- Click `All FaxCorp Tools` to open one menu with every tool.
 - Use native menus for common entries where useful, such as object and UV menu commands.
-- Press `Ctrl+Shift+C` in the 3D View to open the Axis Mesh Clipper menu.
+- Set optional shortcuts in the add-on preferences. All shortcuts are blank by default.
+
+## Shortcuts
+
+Every shortcut is optional and disabled by default. In the add-on preferences, set a key and any modifier toggles for:
+
+- All FaxCorp Tools
+- Axis Mesh Clipper
+- Rename to Material
+- Rename by Collection
+- Layout Objects
+- Clear Split Normals
+- Align UV Islands
+
+The key field expects Blender key event names such as `C`, `X`, `F5`, `SPACE`, or `TAB`. Leave the key field blank to remove that shortcut.
 
 ## Axis Mesh Clipper Behavior
 

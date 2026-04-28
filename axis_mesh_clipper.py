@@ -4,14 +4,11 @@ from mathutils import Vector
 from bpy.props import EnumProperty
 from bpy.types import Menu, Operator
 
-from .preferences import get_preferences
+from .constants import AXIS_CLIPPER_MENU_IDNAME
 from .utils import mode_to_restore, register_classes, restore_selection_and_mode, unregister_classes
 
 
-MENU_IDNAME = "VIEW3D_MT_faxcorp_axis_mesh_clipper"
 EPSILON = 1.0e-6
-
-addon_keymaps = []
 
 
 AXIS_ITEMS = (
@@ -22,58 +19,6 @@ AXIS_ITEMS = (
     ("Z_NEG", "Z-", "Remove geometry on the negative local Z side"),
     ("Z_POS", "Z+", "Remove geometry on the positive local Z side"),
 )
-
-
-def remove_keymap():
-    for keymap, item in addon_keymaps:
-        try:
-            keymap.keymap_items.remove(item)
-        except ReferenceError:
-            pass
-    addon_keymaps.clear()
-
-
-def register_keymap():
-    remove_keymap()
-
-    window_manager = bpy.context.window_manager
-    keyconfig = window_manager.keyconfigs.addon
-    if keyconfig is None:
-        return
-
-    prefs = get_preferences()
-    key_type = (prefs.axis_shortcut_key if prefs else "C").strip().upper() or "C"
-    ctrl = prefs.axis_shortcut_ctrl if prefs else True
-    shift = prefs.axis_shortcut_shift if prefs else True
-    alt = prefs.axis_shortcut_alt if prefs else False
-    oskey = prefs.axis_shortcut_oskey if prefs else False
-
-    keymap = keyconfig.keymaps.new(
-        name="3D View",
-        space_type="VIEW_3D",
-        region_type="WINDOW",
-    )
-
-    try:
-        item = keymap.keymap_items.new(
-            "wm.call_menu",
-            type=key_type,
-            value="PRESS",
-            ctrl=ctrl,
-            shift=shift,
-            alt=alt,
-            oskey=oskey,
-        )
-    except Exception as exc:
-        try:
-            keyconfig.keymaps.remove(keymap)
-        except Exception:
-            pass
-        print(f"FaxCorp Blender Tools: invalid axis clipper shortcut '{key_type}': {exc}")
-        return
-
-    item.properties.name = MENU_IDNAME
-    addon_keymaps.append((keymap, item))
 
 
 def axis_settings(axis):
@@ -190,7 +135,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
 
 
 class VIEW3D_MT_faxcorp_axis_mesh_clipper(Menu):
-    bl_idname = MENU_IDNAME
+    bl_idname = AXIS_CLIPPER_MENU_IDNAME
     bl_label = "Axis Mesh Clipper"
 
     def draw(self, context):
@@ -215,9 +160,7 @@ classes = (
 
 def register():
     register_classes(classes)
-    register_keymap()
 
 
 def unregister():
-    remove_keymap()
     unregister_classes(classes)

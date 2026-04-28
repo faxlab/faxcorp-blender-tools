@@ -8,6 +8,7 @@ from . import (
     layout_objects,
     rename_by_collection,
     rename_to_material,
+    toolbox_menu,
 )
 from .constants import SIDEBAR_CATEGORY
 from .utils import register_classes, unregister_classes
@@ -25,6 +26,8 @@ class FAXCORP_PT_mesh_tools(FAXCORP_PT_tools_base, Panel):
 
     def draw(self, context):
         layout = self.layout
+        toolbox_menu.draw_menu_button(layout)
+        layout.separator()
         axis_mesh_clipper.draw_menu_button(layout)
         layout.operator(
             clear_custom_normals.MESH_OT_faxcorp_clear_split_normals.bl_idname,

@@ -26,6 +26,8 @@ $files = @(
     "README.md",
     "rename_by_collection.py",
     "rename_to_material.py",
+    "shortcuts.py",
+    "toolbox_menu.py",
     "utils.py"
 )
 
