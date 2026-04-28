@@ -25,7 +25,8 @@ $files = @(
     "preferences.py",
     "README.md",
     "rename_by_collection.py",
-    "rename_to_material.py"
+    "rename_to_material.py",
+    "utils.py"
 )
 
 foreach ($file in $files) {

@@ -5,6 +5,7 @@ from bpy.props import EnumProperty
 from bpy.types import Menu, Operator
 
 from .preferences import get_preferences
+from .utils import mode_to_restore, register_classes, restore_selection_and_mode, unregister_classes
 
 
 MENU_IDNAME = "VIEW3D_MT_faxcorp_axis_mesh_clipper"
@@ -73,24 +74,6 @@ def register_keymap():
 
     item.properties.name = MENU_IDNAME
     addon_keymaps.append((keymap, item))
-
-
-def mode_to_restore(context):
-    if context.mode == "EDIT_MESH":
-        return "EDIT"
-    active = context.active_object
-    if active is not None and active.mode != "OBJECT":
-        return active.mode
-    return "OBJECT"
-
-
-def restore_selection(context, active_object, selected_objects):
-    bpy.ops.object.select_all(action="DESELECT")
-    for obj in selected_objects:
-        if obj.name in bpy.data.objects:
-            obj.select_set(True)
-    if active_object and active_object.name in bpy.data.objects:
-        context.view_layer.objects.active = active_object
 
 
 def axis_settings(axis):
@@ -171,7 +154,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
         selected_meshes = [obj for obj in selected_objects if obj.type == "MESH" and obj.data]
         if not selected_meshes:
             self.report({"WARNING"}, "No selected mesh objects found")
-            restore_selection(context, active_object, selected_objects)
+            restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
             return {"CANCELLED"}
 
         changed = 0
@@ -193,12 +176,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
 
             processed_meshes.add(mesh_key)
 
-        restore_selection(context, active_object, selected_objects)
-        if restore_mode != "OBJECT":
-            try:
-                bpy.ops.object.mode_set(mode=restore_mode)
-            except RuntimeError:
-                pass
+        restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
 
         if changed == 0:
             self.report({"WARNING"}, "No geometry was clipped")
@@ -236,12 +214,10 @@ classes = (
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    register_classes(classes)
     register_keymap()
 
 
 def unregister():
     remove_keymap()
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    unregister_classes(classes)

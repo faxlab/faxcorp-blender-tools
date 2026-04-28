@@ -33,13 +33,26 @@ modules = (
 
 
 def register():
-    for module in modules:
-        module.register()
+    started_modules = []
+    try:
+        for module in modules:
+            started_modules.append(module)
+            module.register()
+    except Exception:
+        for module in reversed(started_modules):
+            try:
+                module.unregister()
+            except Exception as exc:
+                print(f"FaxCorp Blender Tools: cleanup failed for {module.__name__}: {exc}")
+        raise
 
 
 def unregister():
     for module in reversed(modules):
-        module.unregister()
+        try:
+            module.unregister()
+        except Exception as exc:
+            print(f"FaxCorp Blender Tools: unregister failed for {module.__name__}: {exc}")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,11 @@ import math
 from mathutils import Vector
 from bpy.types import Operator
 
+from .utils import append_menu, register_classes, remove_menu, unregister_classes
+
+
+menu_state = {"appended": False}
+
 
 def active_uv_layer(bm):
     uv = bm.loops.layers.uv.active
@@ -210,12 +215,14 @@ classes = (UV_OT_faxcorp_align_by_longest_edge,)
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    bpy.types.IMAGE_MT_uvs.append(menu_func)
+    register_classes(classes)
+    try:
+        append_menu(bpy.types.IMAGE_MT_uvs, menu_func, menu_state)
+    except Exception:
+        unregister_classes(classes)
+        raise
 
 
 def unregister():
-    bpy.types.IMAGE_MT_uvs.remove(menu_func)
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    remove_menu(bpy.types.IMAGE_MT_uvs, menu_func, menu_state)
+    unregister_classes(classes)

@@ -10,6 +10,7 @@ from . import (
     rename_to_material,
 )
 from .constants import SIDEBAR_CATEGORY
+from .utils import register_classes, unregister_classes
 
 
 class FAXCORP_PT_tools_base:
@@ -81,10 +82,8 @@ classes = (
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    register_classes(classes)
 
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    unregister_classes(classes)

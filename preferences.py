@@ -3,6 +3,7 @@ from bpy.props import BoolProperty, StringProperty
 from bpy.types import AddonPreferences
 
 from .constants import ADDON_ID
+from .utils import register_classes, unregister_classes
 
 
 def shortcut_label(prefs):
@@ -80,10 +81,8 @@ def get_preferences(context=None):
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    register_classes(classes)
 
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    unregister_classes(classes)
