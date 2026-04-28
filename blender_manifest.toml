@@ -1,0 +1,11 @@
+schema_version = "1.0.0"
+
+id = "faxcorp_blender_tools"
+version = "1.0.0"
+name = "FaxCorp Blender Tools"
+tagline = "A tidy toolbox of FaxLab Blender utilities"
+maintainer = "faxlab3d"
+type = "add-on"
+tags = ["Mesh", "Object", "UV", "3D View"]
+blender_version_min = "5.1.1"
+license = ["SPDX:GPL-3.0-or-later"]

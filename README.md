@@ -1,0 +1,60 @@
+# FaxCorp Blender Tools
+
+One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
+
+## Tools
+
+| Tool | Area | What it does |
+| --- | --- | --- |
+| Axis Mesh Clipper | Mesh | Opens a shortcut menu for clipping selected meshes by local axis. Default shortcut: `Ctrl+Shift+C`. |
+| Rename to Material | Naming | Renames selected mesh objects from their material names, with optional split-by-material behavior. |
+| Align UV Islands by Longest Edge | UV | Rotates each UV island so its longest UV edge becomes horizontal. |
+| Clear Split Normals | Mesh | Clears custom split normals on selected mesh objects. |
+| Layout Objects | Object | Places selected objects end-to-end along X, Y, or Z with a configurable gap. |
+| Rename by Collection | Naming | Renames selected objects from their first collection name. |
+
+## Install In Blender
+
+1. Open Blender 5.1.1 or newer.
+2. Go to `Edit > Preferences > Get Extensions`.
+3. Open the menu in the top-right corner.
+4. Choose `Install from Disk...`.
+5. Select `dist/faxcorp_blender_tools-1.0.0.zip`.
+6. Enable `FaxCorp Blender Tools`.
+
+## Usage
+
+- Open the 3D View sidebar and use the `FaxLab Tools` tab.
+- Use native menus for common entries where useful, such as object and UV menu commands.
+- Press `Ctrl+Shift+C` in the 3D View to open the Axis Mesh Clipper menu.
+
+## Axis Mesh Clipper Behavior
+
+- `X-`: removes geometry with local X below `0`, keeping the positive-X side.
+- `X+`: removes geometry with local X above `0`, keeping the negative-X side.
+- `Y-`, `Y+`, `Z-`, and `Z+` follow the same pattern.
+- Clipping uses each object's local origin and local axes.
+
+## Packaging
+
+Run this from the repo root:
+
+```powershell
+.\tools\package_addon.ps1
+```
+
+The script creates:
+
+```text
+dist/faxcorp_blender_tools-1.0.0.zip
+```
+
+The zip is arranged for Blender's `Install from Disk...` flow.
+
+## Source Notes
+
+This suite collects and reorganizes tools from older standalone scripts and add-ons. The original folders are left untouched.
+
+## License
+
+GPL-3.0-or-later. See `LICENSE`.
