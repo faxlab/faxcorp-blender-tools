@@ -1,16 +1,18 @@
 # FaxCorp Blender Tools
 
-One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
+One tidy Blender add-on containing FaxCorp utility tools.
 
 ## Tools
 
 | Tool | Area | What it does |
 | --- | --- | --- |
-| Axis Mesh Clipper | Mesh | Opens a shortcut menu for clipping selected meshes by local axis. Default shortcut: `Ctrl+Shift+C`. |
+| All FaxCorp Tools | Menu | Opens one menu containing every tool in the suite. |
+| Axis Mesh Clipper | Mesh | Opens a menu for clipping selected meshes by local axis. |
 | Rename to Material | Naming | Renames selected mesh objects from their material names, with optional split-by-material behavior. |
 | Align UV Islands by Longest Edge | UV | Rotates each UV island so its longest UV edge becomes horizontal. |
 | Clear Split Normals | Mesh | Clears custom split normals on selected mesh objects. |
 | Layout Objects | Object | Places selected objects end-to-end along X, Y, or Z with a configurable gap. |
+| Set Pivot | Object | Moves selected mesh object pivots to local min, middle, max, or kept axis positions. |
 | Rename by Collection | Naming | Renames selected objects from their first collection name. |
 
 ## Install In Blender
@@ -19,14 +21,30 @@ One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.0.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.3.zip`.
 6. Enable `FaxCorp Blender Tools`.
 
 ## Usage
 
-- Open the 3D View sidebar and use the `FaxLab Tools` tab.
+- Open the 3D View sidebar and use the `FaxCorp Tools` tab.
+- Click `All FaxCorp Tools` to open one menu with every tool.
 - Use native menus for common entries where useful, such as object and UV menu commands.
-- Press `Ctrl+Shift+C` in the 3D View to open the Axis Mesh Clipper menu.
+- Set optional shortcuts in the add-on preferences. All shortcuts are blank by default.
+
+## Shortcuts
+
+Every shortcut is optional and disabled by default. In the add-on preferences, set a key and any modifier toggles for:
+
+- All FaxCorp Tools
+- Axis Mesh Clipper
+- Rename to Material
+- Rename by Collection
+- Layout Objects
+- Set Pivot
+- Clear Split Normals
+- Align UV Islands
+
+The key field expects Blender key event names such as `C`, `X`, `F5`, `SPACE`, or `TAB`. Leave the key field blank to remove that shortcut.
 
 ## Axis Mesh Clipper Behavior
 
@@ -34,6 +52,15 @@ One tidy Blender add-on containing FaxLab/FaxCorp utility tools.
 - `X+`: removes geometry with local X above `0`, keeping the negative-X side.
 - `Y-`, `Y+`, `Z-`, and `Z+` follow the same pattern.
 - Clipping uses each object's local origin and local axes.
+
+## Set Pivot Behavior
+
+- Works on all selected mesh objects.
+- Defaults to X `Middle`, Y `Middle`, and Z `Min`.
+- Each axis can be set to `Min`, `Middle`, `Max`, or `Keep`.
+- Settings are saved on the scene and persist in `.blend` files.
+- The object origin moves while visible mesh geometry stays in place.
+- Use `Options...` or the All FaxCorp Tools menu entry to open a dialog before applying.
 
 ## Packaging
 
@@ -46,7 +73,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.0.zip
+dist/faxcorp_blender_tools-1.0.3.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.

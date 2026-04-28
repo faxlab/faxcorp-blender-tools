@@ -1,6 +1,11 @@
 import bpy
 from bpy.types import Operator
 
+from .utils import append_menu, register_classes, remove_menu, unregister_classes
+
+
+menu_state = {"appended": False}
+
 
 class OBJECT_OT_faxcorp_rename_by_collection(Operator):
     bl_idname = "object.faxcorp_rename_by_collection"
@@ -36,12 +41,14 @@ classes = (OBJECT_OT_faxcorp_rename_by_collection,)
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    bpy.types.VIEW3D_MT_object.append(menu_func)
+    register_classes(classes)
+    try:
+        append_menu(bpy.types.VIEW3D_MT_object, menu_func, menu_state)
+    except Exception:
+        unregister_classes(classes)
+        raise
 
 
 def unregister():
-    bpy.types.VIEW3D_MT_object.remove(menu_func)
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    remove_menu(bpy.types.VIEW3D_MT_object, menu_func, menu_state)
+    unregister_classes(classes)

@@ -2,6 +2,18 @@ import bpy
 from bpy.props import EnumProperty, FloatProperty, PointerProperty
 from bpy.types import Operator, PropertyGroup
 
+from .utils import (
+    append_menu,
+    mode_to_restore,
+    register_classes,
+    remove_menu,
+    restore_selection_and_mode,
+    unregister_classes,
+)
+
+
+menu_state = {"appended": False}
+
 
 class FAXCORP_LayoutObjectsSettings(PropertyGroup):
     axis: EnumProperty(
@@ -34,32 +46,39 @@ class OBJECT_OT_faxcorp_pack_on_axis(Operator):
     def execute(self, context):
         settings = context.scene.faxcorp_layout_objects_settings
         objects = list(context.selected_objects)
-        if context.mode != "OBJECT":
-            bpy.ops.object.mode_set(mode="OBJECT")
+        active_object = context.active_object
+        restore_mode = mode_to_restore(context)
+
         if len(objects) < 2:
             self.report({"WARNING"}, "Select at least two objects")
             return {"CANCELLED"}
 
-        if settings.sort_method == "NAME":
-            objects.sort(key=lambda obj: obj.name)
-        elif settings.sort_method == "VOLUME":
-            objects.sort(
-                key=lambda obj: obj.dimensions.x * obj.dimensions.y * obj.dimensions.z,
-                reverse=True,
-            )
+        if context.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
 
-        axis_index = "XYZ".index(settings.axis)
-        previous_center = objects[0].location[axis_index]
-        previous_half = objects[0].dimensions[axis_index] / 2.0
-        previous_end = previous_center + previous_half
+        try:
+            if settings.sort_method == "NAME":
+                objects.sort(key=lambda obj: obj.name)
+            elif settings.sort_method == "VOLUME":
+                objects.sort(
+                    key=lambda obj: obj.dimensions.x * obj.dimensions.y * obj.dimensions.z,
+                    reverse=True,
+                )
 
-        for obj in objects[1:]:
-            half = obj.dimensions[axis_index] / 2.0
-            new_center = previous_end + settings.gap + half
-            location = obj.location.copy()
-            location[axis_index] = new_center
-            obj.location = location
-            previous_end = new_center + half
+            axis_index = "XYZ".index(settings.axis)
+            previous_center = objects[0].location[axis_index]
+            previous_half = objects[0].dimensions[axis_index] / 2.0
+            previous_end = previous_center + previous_half
+
+            for obj in objects[1:]:
+                half = obj.dimensions[axis_index] / 2.0
+                new_center = previous_end + settings.gap + half
+                location = obj.location.copy()
+                location[axis_index] = new_center
+                obj.location = location
+                previous_end = new_center + half
+        finally:
+            restore_selection_and_mode(context, active_object, objects, restore_mode)
 
         self.report({"INFO"}, f"Laid out {len(objects)} object(s)")
         return {"FINISHED"}
@@ -76,16 +95,21 @@ classes = (
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    bpy.types.Scene.faxcorp_layout_objects_settings = PointerProperty(
-        type=FAXCORP_LayoutObjectsSettings
-    )
-    bpy.types.VIEW3D_MT_object.append(menu_func)
+    register_classes(classes)
+    try:
+        bpy.types.Scene.faxcorp_layout_objects_settings = PointerProperty(
+            type=FAXCORP_LayoutObjectsSettings
+        )
+        append_menu(bpy.types.VIEW3D_MT_object, menu_func, menu_state)
+    except Exception:
+        if hasattr(bpy.types.Scene, "faxcorp_layout_objects_settings"):
+            del bpy.types.Scene.faxcorp_layout_objects_settings
+        unregister_classes(classes)
+        raise
 
 
 def unregister():
-    bpy.types.VIEW3D_MT_object.remove(menu_func)
-    del bpy.types.Scene.faxcorp_layout_objects_settings
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    remove_menu(bpy.types.VIEW3D_MT_object, menu_func, menu_state)
+    if hasattr(bpy.types.Scene, "faxcorp_layout_objects_settings"):
+        del bpy.types.Scene.faxcorp_layout_objects_settings
+    unregister_classes(classes)

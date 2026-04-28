@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $distDir = Join-Path $repoRoot "dist"
-$zipPath = Join-Path $distDir "faxcorp_blender_tools-1.0.0.zip"
+$zipPath = Join-Path $distDir "faxcorp_blender_tools-1.0.3.zip"
 $tempDir = Join-Path $distDir "_package"
 
 if (Test-Path $tempDir) {
@@ -25,7 +25,11 @@ $files = @(
     "preferences.py",
     "README.md",
     "rename_by_collection.py",
-    "rename_to_material.py"
+    "rename_to_material.py",
+    "set_pivot.py",
+    "shortcuts.py",
+    "toolbox_menu.py",
+    "utils.py"
 )
 
 foreach ($file in $files) {

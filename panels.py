@@ -8,8 +8,11 @@ from . import (
     layout_objects,
     rename_by_collection,
     rename_to_material,
+    set_pivot,
+    toolbox_menu,
 )
 from .constants import SIDEBAR_CATEGORY
+from .utils import register_classes, unregister_classes
 
 
 class FAXCORP_PT_tools_base:
@@ -24,6 +27,8 @@ class FAXCORP_PT_mesh_tools(FAXCORP_PT_tools_base, Panel):
 
     def draw(self, context):
         layout = self.layout
+        toolbox_menu.draw_menu_button(layout)
+        layout.separator()
         axis_mesh_clipper.draw_menu_button(layout)
         layout.operator(
             clear_custom_normals.MESH_OT_faxcorp_clear_split_normals.bl_idname,
@@ -43,6 +48,23 @@ class FAXCORP_PT_object_layout_tools(FAXCORP_PT_tools_base, Panel):
         layout.prop(settings, "sort_method")
         layout.separator()
         layout.operator(layout_objects.OBJECT_OT_faxcorp_pack_on_axis.bl_idname)
+
+
+class FAXCORP_PT_set_pivot_tools(FAXCORP_PT_tools_base, Panel):
+    bl_label = "Set Pivot"
+    bl_idname = "FAXCORP_PT_set_pivot_tools"
+
+    def draw(self, context):
+        layout = self.layout
+        settings = context.scene.faxcorp_set_pivot_settings
+        row = layout.row(align=True)
+        row.prop(settings, "x_mode", text="X")
+        row.prop(settings, "y_mode", text="Y")
+        row.prop(settings, "z_mode", text="Z")
+        row = layout.row(align=True)
+        row.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
+        row.operator_context = "INVOKE_DEFAULT"
+        row.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot_dialog.bl_idname, text="Options...")
 
 
 class FAXCORP_PT_uv_tools(FAXCORP_PT_tools_base, Panel):
@@ -75,16 +97,15 @@ class FAXCORP_PT_naming_tools(FAXCORP_PT_tools_base, Panel):
 classes = (
     FAXCORP_PT_mesh_tools,
     FAXCORP_PT_object_layout_tools,
+    FAXCORP_PT_set_pivot_tools,
     FAXCORP_PT_uv_tools,
     FAXCORP_PT_naming_tools,
 )
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    register_classes(classes)
 
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    unregister_classes(classes)

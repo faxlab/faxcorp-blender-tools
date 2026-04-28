@@ -4,13 +4,11 @@ from mathutils import Vector
 from bpy.props import EnumProperty
 from bpy.types import Menu, Operator
 
-from .preferences import get_preferences
+from .constants import AXIS_CLIPPER_MENU_IDNAME
+from .utils import mode_to_restore, register_classes, restore_selection_and_mode, unregister_classes
 
 
-MENU_IDNAME = "VIEW3D_MT_faxcorp_axis_mesh_clipper"
 EPSILON = 1.0e-6
-
-addon_keymaps = []
 
 
 AXIS_ITEMS = (
@@ -21,76 +19,6 @@ AXIS_ITEMS = (
     ("Z_NEG", "Z-", "Remove geometry on the negative local Z side"),
     ("Z_POS", "Z+", "Remove geometry on the positive local Z side"),
 )
-
-
-def remove_keymap():
-    for keymap, item in addon_keymaps:
-        try:
-            keymap.keymap_items.remove(item)
-        except ReferenceError:
-            pass
-    addon_keymaps.clear()
-
-
-def register_keymap():
-    remove_keymap()
-
-    window_manager = bpy.context.window_manager
-    keyconfig = window_manager.keyconfigs.addon
-    if keyconfig is None:
-        return
-
-    prefs = get_preferences()
-    key_type = (prefs.axis_shortcut_key if prefs else "C").strip().upper() or "C"
-    ctrl = prefs.axis_shortcut_ctrl if prefs else True
-    shift = prefs.axis_shortcut_shift if prefs else True
-    alt = prefs.axis_shortcut_alt if prefs else False
-    oskey = prefs.axis_shortcut_oskey if prefs else False
-
-    keymap = keyconfig.keymaps.new(
-        name="3D View",
-        space_type="VIEW_3D",
-        region_type="WINDOW",
-    )
-
-    try:
-        item = keymap.keymap_items.new(
-            "wm.call_menu",
-            type=key_type,
-            value="PRESS",
-            ctrl=ctrl,
-            shift=shift,
-            alt=alt,
-            oskey=oskey,
-        )
-    except Exception as exc:
-        try:
-            keyconfig.keymaps.remove(keymap)
-        except Exception:
-            pass
-        print(f"FaxCorp Blender Tools: invalid axis clipper shortcut '{key_type}': {exc}")
-        return
-
-    item.properties.name = MENU_IDNAME
-    addon_keymaps.append((keymap, item))
-
-
-def mode_to_restore(context):
-    if context.mode == "EDIT_MESH":
-        return "EDIT"
-    active = context.active_object
-    if active is not None and active.mode != "OBJECT":
-        return active.mode
-    return "OBJECT"
-
-
-def restore_selection(context, active_object, selected_objects):
-    bpy.ops.object.select_all(action="DESELECT")
-    for obj in selected_objects:
-        if obj.name in bpy.data.objects:
-            obj.select_set(True)
-    if active_object and active_object.name in bpy.data.objects:
-        context.view_layer.objects.active = active_object
 
 
 def axis_settings(axis):
@@ -171,7 +99,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
         selected_meshes = [obj for obj in selected_objects if obj.type == "MESH" and obj.data]
         if not selected_meshes:
             self.report({"WARNING"}, "No selected mesh objects found")
-            restore_selection(context, active_object, selected_objects)
+            restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
             return {"CANCELLED"}
 
         changed = 0
@@ -193,12 +121,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
 
             processed_meshes.add(mesh_key)
 
-        restore_selection(context, active_object, selected_objects)
-        if restore_mode != "OBJECT":
-            try:
-                bpy.ops.object.mode_set(mode=restore_mode)
-            except RuntimeError:
-                pass
+        restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
 
         if changed == 0:
             self.report({"WARNING"}, "No geometry was clipped")
@@ -212,7 +135,7 @@ class MESH_OT_faxcorp_axis_mesh_clip(Operator):
 
 
 class VIEW3D_MT_faxcorp_axis_mesh_clipper(Menu):
-    bl_idname = MENU_IDNAME
+    bl_idname = AXIS_CLIPPER_MENU_IDNAME
     bl_label = "Axis Mesh Clipper"
 
     def draw(self, context):
@@ -236,12 +159,8 @@ classes = (
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    register_keymap()
+    register_classes(classes)
 
 
 def unregister():
-    remove_keymap()
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    unregister_classes(classes)
