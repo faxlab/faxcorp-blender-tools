@@ -20,7 +20,7 @@ One tidy Blender add-on containing FaxCorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.0.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.1.zip`.
 6. Enable `FaxCorp Blender Tools`.
 
 ## Usage
@@ -62,7 +62,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.0.zip
+dist/faxcorp_blender_tools-1.0.1.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.

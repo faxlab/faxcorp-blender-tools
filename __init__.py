@@ -1,7 +1,7 @@
 bl_info = {
     "name": "FaxCorp Blender Tools",
     "author": "faxcorp",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     "blender": (5, 1, 1),
     "location": "View3D > Sidebar > FaxCorp Tools",
     "description": "A tidy toolbox of FaxCorp Blender utilities",
