@@ -16,7 +16,7 @@ from .utils import register_classes, unregister_classes
 
 class VIEW3D_MT_faxcorp_tools(Menu):
     bl_idname = TOOLBOX_MENU_IDNAME
-    bl_label = "FaxCorp Tools"
+    bl_label = "Faxcorp Tools"
 
     def draw(self, context):
         layout = self.layout
@@ -49,7 +49,7 @@ class VIEW3D_MT_faxcorp_tools(Menu):
 
 
 def draw_menu_button(layout):
-    layout.menu(VIEW3D_MT_faxcorp_tools.bl_idname, text="All FaxCorp Tools")
+    layout.menu(VIEW3D_MT_faxcorp_tools.bl_idname, text="All Faxcorp Tools")
 
 
 classes = (VIEW3D_MT_faxcorp_tools,)

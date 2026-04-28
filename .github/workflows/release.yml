@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read and validate version
+        id: version
+        shell: pwsh
+        run: |
+          $manifestText = Get-Content -Raw -LiteralPath blender_manifest.toml
+          if ($manifestText -notmatch '(?m)^version\s*=\s*"([^"]+)"') {
+              throw "Could not read version from blender_manifest.toml"
+          }
+
+          $version = $Matches[1]
+          $expectedTag = "v$version"
+          $actualTag = "${{ github.ref_name }}"
+
+          if ($actualTag -ne $expectedTag) {
+              throw "Tag $actualTag does not match blender_manifest.toml version $version. Expected $expectedTag."
+          }
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "zip_path=dist/faxcorp_blender_tools-$version.zip" >> $env:GITHUB_OUTPUT
+
+      - name: Build add-on zip
+        shell: pwsh
+        run: ./tools/package_addon.ps1
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            "${{ steps.version.outputs.zip_path }}" \
+            --title "Faxcorp Blender Tools ${{ steps.version.outputs.version }}" \
+            --notes "Release build for Faxcorp Blender Tools ${{ steps.version.outputs.version }}."

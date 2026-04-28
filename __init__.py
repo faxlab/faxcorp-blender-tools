@@ -1,10 +1,10 @@
 bl_info = {
-    "name": "FaxCorp Blender Tools",
+    "name": "Faxcorp Blender Tools",
     "author": "faxcorp",
     "version": (1, 0, 3),
     "blender": (5, 1, 1),
-    "location": "View3D > Sidebar > FaxCorp Tools",
-    "description": "A tidy toolbox of FaxCorp Blender utilities",
+    "location": "View3D > Sidebar > Faxcorp Tools",
+    "description": "A tidy toolbox of Faxcorp Blender utilities",
     "category": "3D View",
 }
 
@@ -49,7 +49,7 @@ def register():
             try:
                 module.unregister()
             except Exception as exc:
-                print(f"FaxCorp Blender Tools: cleanup failed for {module.__name__}: {exc}")
+                print(f"Faxcorp Blender Tools: cleanup failed for {module.__name__}: {exc}")
         raise
 
 
@@ -58,7 +58,7 @@ def unregister():
         try:
             module.unregister()
         except Exception as exc:
-            print(f"FaxCorp Blender Tools: unregister failed for {module.__name__}: {exc}")
+            print(f"Faxcorp Blender Tools: unregister failed for {module.__name__}: {exc}")
 
 
 if __name__ == "__main__":

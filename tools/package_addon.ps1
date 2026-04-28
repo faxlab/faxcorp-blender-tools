@@ -2,7 +2,15 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $distDir = Join-Path $repoRoot "dist"
-$zipPath = Join-Path $distDir "faxcorp_blender_tools-1.0.3.zip"
+$manifestPath = Join-Path $repoRoot "blender_manifest.toml"
+$manifestText = Get-Content -Raw -LiteralPath $manifestPath
+
+if ($manifestText -notmatch '(?m)^version\s*=\s*"([^"]+)"') {
+    throw "Could not read version from blender_manifest.toml"
+}
+
+$version = $Matches[1]
+$zipPath = Join-Path $distDir "faxcorp_blender_tools-$version.zip"
 $tempDir = Join-Path $distDir "_package"
 
 if (Test-Path $tempDir) {
