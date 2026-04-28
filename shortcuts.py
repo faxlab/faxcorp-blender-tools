@@ -7,7 +7,7 @@ addon_keymaps = []
 
 
 SHORTCUT_ACTIONS = (
-    ("toolbox", "All FaxCorp Tools", "wm.call_menu", {"name": TOOLBOX_MENU_IDNAME}),
+    ("toolbox", "All Faxcorp Tools", "wm.call_menu", {"name": TOOLBOX_MENU_IDNAME}),
     ("axis_clipper", "Axis Mesh Clipper", "wm.call_menu", {"name": AXIS_CLIPPER_MENU_IDNAME}),
     ("rename_material", "Rename to Material", "object.faxcorp_rename_to_material", {}),
     ("rename_collection", "Rename by Collection", "object.faxcorp_rename_by_collection", {}),
@@ -85,7 +85,7 @@ def register_keymaps():
                 **shortcut_modifiers(prefs, prefix),
             )
         except Exception as exc:
-            print(f"FaxCorp Blender Tools: invalid shortcut for {label} '{key_type}': {exc}")
+            print(f"Faxcorp Blender Tools: invalid shortcut for {label} '{key_type}': {exc}")
             continue
 
         for property_name, property_value in properties.items():

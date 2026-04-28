@@ -7,7 +7,7 @@ from .utils import register_classes, unregister_classes
 
 
 SHORTCUT_ROWS = (
-    ("toolbox", "All FaxCorp Tools"),
+    ("toolbox", "All Faxcorp Tools"),
     ("axis_clipper", "Axis Mesh Clipper"),
     ("rename_material", "Rename to Material"),
     ("rename_collection", "Rename by Collection"),
@@ -74,7 +74,7 @@ def draw_shortcut(layout, prefs, prefix, label):
 class FAXCORP_AddonPreferences(AddonPreferences):
     bl_idname = ADDON_ID
 
-    toolbox_shortcut_key: key_property("All FaxCorp Tools")
+    toolbox_shortcut_key: key_property("All Faxcorp Tools")
     toolbox_shortcut_ctrl: modifier_property("Ctrl")
     toolbox_shortcut_shift: modifier_property("Shift")
     toolbox_shortcut_alt: modifier_property("Alt")
