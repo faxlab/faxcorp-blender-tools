@@ -12,7 +12,7 @@ SHORTCUT_ACTIONS = (
     ("rename_material", "Rename to Material", "object.faxcorp_rename_to_material", {}),
     ("rename_collection", "Rename by Collection", "object.faxcorp_rename_by_collection", {}),
     ("layout_objects", "Layout Objects", "object.faxcorp_pack_on_axis", {}),
-    ("set_pivot", "Set Pivot", "object.faxcorp_set_pivot", {}),
+    ("set_pivot", "Set Pivot", "object.faxcorp_set_pivot_dialog", {}),
     ("clear_normals", "Clear Split Normals", "mesh.faxcorp_clear_split_normals", {}),
     ("align_uv", "Align UV Islands", "uv.faxcorp_align_by_longest_edge", {}),
 )

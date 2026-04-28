@@ -35,7 +35,9 @@ class VIEW3D_MT_faxcorp_tools(Menu):
             layout_objects.OBJECT_OT_faxcorp_pack_on_axis.bl_idname,
             icon="EMPTY_ARROWS",
         )
-        layout.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
+        row = layout.row()
+        row.operator_context = "INVOKE_DEFAULT"
+        row.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot_dialog.bl_idname)
         layout.operator(
             clear_custom_normals.MESH_OT_faxcorp_clear_split_normals.bl_idname,
             icon="NORMALS_VERTEX",

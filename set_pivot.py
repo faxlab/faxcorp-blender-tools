@@ -71,11 +71,11 @@ def axis_target(mode, axis_index, min_bound, max_bound):
     return 0.0
 
 
-def target_from_settings(settings, min_bound, max_bound):
+def target_from_modes(x_mode, y_mode, z_mode, min_bound, max_bound):
     return Vector((
-        axis_target(settings.x_mode, 0, min_bound, max_bound),
-        axis_target(settings.y_mode, 1, min_bound, max_bound),
-        axis_target(settings.z_mode, 2, min_bound, max_bound),
+        axis_target(x_mode, 0, min_bound, max_bound),
+        axis_target(y_mode, 1, min_bound, max_bound),
+        axis_target(z_mode, 2, min_bound, max_bound),
     ))
 
 
@@ -111,6 +111,52 @@ def set_object_pivot(obj, target_local):
     return True, copied_mesh
 
 
+def apply_set_pivot(context, operator, x_mode, y_mode, z_mode):
+    selected_objects = list(context.selected_objects)
+    selected_meshes = [obj for obj in selected_objects if obj.type == "MESH" and obj.data]
+    active_object = context.active_object
+    restore_mode = mode_to_restore(context)
+
+    if not selected_meshes:
+        operator.report({"WARNING"}, "No selected mesh objects found")
+        return {"CANCELLED"}
+
+    if context.mode != "OBJECT":
+        bpy.ops.object.mode_set(mode="OBJECT")
+
+    changed = 0
+    skipped_empty = 0
+    copied_meshes = 0
+
+    try:
+        for obj in selected_meshes:
+            bounds = mesh_bounds(obj.data)
+            if bounds is None:
+                skipped_empty += 1
+                continue
+
+            target_local = target_from_modes(x_mode, y_mode, z_mode, bounds[0], bounds[1])
+            did_change, copied_mesh = set_object_pivot(obj, target_local)
+            if did_change:
+                changed += 1
+            if copied_mesh:
+                copied_meshes += 1
+    finally:
+        restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
+
+    if changed == 0:
+        operator.report({"WARNING"}, "No pivots were changed")
+        return {"CANCELLED"}
+
+    message = f"Set pivot on {changed} mesh object(s)"
+    if skipped_empty:
+        message += f", skipped {skipped_empty} empty mesh(es)"
+    if copied_meshes:
+        message += f", made {copied_meshes} linked mesh copy/copies"
+    operator.report({"INFO"}, message)
+    return {"FINISHED"}
+
+
 class OBJECT_OT_faxcorp_set_pivot(Operator):
     bl_idname = "object.faxcorp_set_pivot"
     bl_label = "Set Pivot"
@@ -123,58 +169,67 @@ class OBJECT_OT_faxcorp_set_pivot(Operator):
 
     def execute(self, context):
         settings = context.scene.faxcorp_set_pivot_settings
-        selected_objects = list(context.selected_objects)
-        selected_meshes = [obj for obj in selected_objects if obj.type == "MESH" and obj.data]
-        active_object = context.active_object
-        restore_mode = mode_to_restore(context)
+        return apply_set_pivot(context, self, settings.x_mode, settings.y_mode, settings.z_mode)
 
-        if not selected_meshes:
-            self.report({"WARNING"}, "No selected mesh objects found")
-            return {"CANCELLED"}
 
-        if context.mode != "OBJECT":
-            bpy.ops.object.mode_set(mode="OBJECT")
+class OBJECT_OT_faxcorp_set_pivot_dialog(Operator):
+    bl_idname = "object.faxcorp_set_pivot_dialog"
+    bl_label = "Set Pivot Options"
+    bl_description = "Choose pivot axis settings, save them, and set selected mesh pivots"
+    bl_options = {"REGISTER", "UNDO"}
 
-        changed = 0
-        skipped_empty = 0
-        copied_meshes = 0
+    x_mode: EnumProperty(
+        name="X",
+        items=PIVOT_MODE_ITEMS,
+        default="MIDDLE",
+    )
+    y_mode: EnumProperty(
+        name="Y",
+        items=PIVOT_MODE_ITEMS,
+        default="MIDDLE",
+    )
+    z_mode: EnumProperty(
+        name="Z",
+        items=PIVOT_MODE_ITEMS,
+        default="MIN",
+    )
 
-        try:
-            for obj in selected_meshes:
-                bounds = mesh_bounds(obj.data)
-                if bounds is None:
-                    skipped_empty += 1
-                    continue
+    @classmethod
+    def poll(cls, context):
+        return OBJECT_OT_faxcorp_set_pivot.poll(context)
 
-                target_local = target_from_settings(settings, bounds[0], bounds[1])
-                did_change, copied_mesh = set_object_pivot(obj, target_local)
-                if did_change:
-                    changed += 1
-                if copied_mesh:
-                    copied_meshes += 1
-        finally:
-            restore_selection_and_mode(context, active_object, selected_objects, restore_mode)
+    def invoke(self, context, event):
+        settings = context.scene.faxcorp_set_pivot_settings
+        self.x_mode = settings.x_mode
+        self.y_mode = settings.y_mode
+        self.z_mode = settings.z_mode
+        return context.window_manager.invoke_props_dialog(self)
 
-        if changed == 0:
-            self.report({"WARNING"}, "No pivots were changed")
-            return {"CANCELLED"}
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row(align=True)
+        row.prop(self, "x_mode", text="X")
+        row.prop(self, "y_mode", text="Y")
+        row.prop(self, "z_mode", text="Z")
 
-        message = f"Set pivot on {changed} mesh object(s)"
-        if skipped_empty:
-            message += f", skipped {skipped_empty} empty mesh(es)"
-        if copied_meshes:
-            message += f", made {copied_meshes} linked mesh copy/copies"
-        self.report({"INFO"}, message)
-        return {"FINISHED"}
+    def execute(self, context):
+        settings = context.scene.faxcorp_set_pivot_settings
+        settings.x_mode = self.x_mode
+        settings.y_mode = self.y_mode
+        settings.z_mode = self.z_mode
+        return apply_set_pivot(context, self, self.x_mode, self.y_mode, self.z_mode)
 
 
 def menu_func(self, context):
-    self.layout.operator(OBJECT_OT_faxcorp_set_pivot.bl_idname)
+    row = self.layout.row()
+    row.operator_context = "INVOKE_DEFAULT"
+    row.operator(OBJECT_OT_faxcorp_set_pivot_dialog.bl_idname)
 
 
 classes = (
     FAXCORP_SetPivotSettings,
     OBJECT_OT_faxcorp_set_pivot,
+    OBJECT_OT_faxcorp_set_pivot_dialog,
 )
 
 

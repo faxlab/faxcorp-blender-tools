@@ -61,7 +61,10 @@ class FAXCORP_PT_set_pivot_tools(FAXCORP_PT_tools_base, Panel):
         row.prop(settings, "x_mode", text="X")
         row.prop(settings, "y_mode", text="Y")
         row.prop(settings, "z_mode", text="Z")
-        layout.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
+        row = layout.row(align=True)
+        row.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot.bl_idname)
+        row.operator_context = "INVOKE_DEFAULT"
+        row.operator(set_pivot.OBJECT_OT_faxcorp_set_pivot_dialog.bl_idname, text="Options...")
 
 
 class FAXCORP_PT_uv_tools(FAXCORP_PT_tools_base, Panel):

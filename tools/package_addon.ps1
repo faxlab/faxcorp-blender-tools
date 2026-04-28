@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $distDir = Join-Path $repoRoot "dist"
-$zipPath = Join-Path $distDir "faxcorp_blender_tools-1.0.2.zip"
+$zipPath = Join-Path $distDir "faxcorp_blender_tools-1.0.3.zip"
 $tempDir = Join-Path $distDir "_package"
 
 if (Test-Path $tempDir) {

@@ -21,7 +21,7 @@ One tidy Blender add-on containing FaxCorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.2.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.3.zip`.
 6. Enable `FaxCorp Blender Tools`.
 
 ## Usage
@@ -60,6 +60,7 @@ The key field expects Blender key event names such as `C`, `X`, `F5`, `SPACE`, o
 - Each axis can be set to `Min`, `Middle`, `Max`, or `Keep`.
 - Settings are saved on the scene and persist in `.blend` files.
 - The object origin moves while visible mesh geometry stays in place.
+- Use `Options...` or the All FaxCorp Tools menu entry to open a dialog before applying.
 
 ## Packaging
 
@@ -72,7 +73,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.2.zip
+dist/faxcorp_blender_tools-1.0.3.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.
