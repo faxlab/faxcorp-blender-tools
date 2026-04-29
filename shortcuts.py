@@ -11,6 +11,7 @@ SHORTCUT_ACTIONS = (
     ("axis_clipper", "Axis Mesh Clipper", "wm.call_menu", {"name": AXIS_CLIPPER_MENU_IDNAME}),
     ("rename_material", "Rename to Material", "object.faxcorp_rename_to_material", {}),
     ("rename_collection", "Rename by Collection", "object.faxcorp_rename_by_collection", {}),
+    ("strip_dots_numbers", "Strip Dots and Numbers", "object.faxcorp_strip_dots_numbers", {}),
     ("layout_objects", "Layout Objects", "object.faxcorp_pack_on_axis", {}),
     ("set_pivot", "Set Pivot", "object.faxcorp_set_pivot_dialog", {}),
     ("clear_normals", "Clear Split Normals", "mesh.faxcorp_clear_split_normals", {}),

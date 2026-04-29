@@ -11,6 +11,7 @@ SHORTCUT_ROWS = (
     ("axis_clipper", "Axis Mesh Clipper"),
     ("rename_material", "Rename to Material"),
     ("rename_collection", "Rename by Collection"),
+    ("strip_dots_numbers", "Strip Dots and Numbers"),
     ("layout_objects", "Layout Objects"),
     ("set_pivot", "Set Pivot"),
     ("clear_normals", "Clear Split Normals"),
@@ -97,6 +98,12 @@ class FAXCORP_AddonPreferences(AddonPreferences):
     rename_collection_shortcut_shift: modifier_property("Shift")
     rename_collection_shortcut_alt: modifier_property("Alt")
     rename_collection_shortcut_oskey: modifier_property("OSKey")
+
+    strip_dots_numbers_shortcut_key: key_property("Strip Dots and Numbers")
+    strip_dots_numbers_shortcut_ctrl: modifier_property("Ctrl")
+    strip_dots_numbers_shortcut_shift: modifier_property("Shift")
+    strip_dots_numbers_shortcut_alt: modifier_property("Alt")
+    strip_dots_numbers_shortcut_oskey: modifier_property("OSKey")
 
     layout_objects_shortcut_key: key_property("Layout Objects")
     layout_objects_shortcut_ctrl: modifier_property("Ctrl")

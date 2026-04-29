@@ -14,6 +14,7 @@ One tidy Blender add-on containing Faxcorp utility tools.
 | Layout Objects | Object | Places selected objects end-to-end along X, Y, or Z with a configurable gap. |
 | Set Pivot | Object | Moves selected mesh object pivots to local min, middle, max, or kept axis positions. |
 | Rename by Collection | Naming | Renames selected objects from their first collection name. |
+| Strip Dots and Numbers | Naming | Removes dots and digits from selected object names. |
 
 ## Install In Blender
 
@@ -21,7 +22,7 @@ One tidy Blender add-on containing Faxcorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.3.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.4.zip`.
 6. Enable `Faxcorp Blender Tools`.
 
 ## Usage
@@ -39,6 +40,7 @@ Every shortcut is optional and disabled by default. In the add-on preferences, s
 - Axis Mesh Clipper
 - Rename to Material
 - Rename by Collection
+- Strip Dots and Numbers
 - Layout Objects
 - Set Pivot
 - Clear Split Normals
@@ -73,7 +75,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.3.zip
+dist/faxcorp_blender_tools-1.0.4.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.

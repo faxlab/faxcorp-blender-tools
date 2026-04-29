@@ -9,6 +9,7 @@ from . import (
     rename_by_collection,
     rename_to_material,
     set_pivot,
+    strip_dots_numbers,
     toolbox_menu,
 )
 from .constants import SIDEBAR_CATEGORY
@@ -91,6 +92,10 @@ class FAXCORP_PT_naming_tools(FAXCORP_PT_tools_base, Panel):
         layout.operator(
             rename_by_collection.OBJECT_OT_faxcorp_rename_by_collection.bl_idname,
             icon="OUTLINER_COLLECTION",
+        )
+        layout.operator(
+            strip_dots_numbers.OBJECT_OT_faxcorp_strip_dots_numbers.bl_idname,
+            icon="FILE_TEXT",
         )
 
 

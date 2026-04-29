@@ -36,6 +36,7 @@ $files = @(
     "rename_to_material.py",
     "set_pivot.py",
     "shortcuts.py",
+    "strip_dots_numbers.py",
     "toolbox_menu.py",
     "utils.py"
 )

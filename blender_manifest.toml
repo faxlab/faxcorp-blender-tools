@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "faxcorp_blender_tools"
-version = "1.0.3"
+version = "1.0.4"
 name = "Faxcorp Blender Tools"
 tagline = "A tidy toolbox of Faxcorp Blender utilities"
 maintainer = "faxcorp"

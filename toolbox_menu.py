@@ -9,6 +9,7 @@ from . import (
     rename_by_collection,
     rename_to_material,
     set_pivot,
+    strip_dots_numbers,
 )
 from .constants import TOOLBOX_MENU_IDNAME
 from .utils import register_classes, unregister_classes
@@ -29,6 +30,10 @@ class VIEW3D_MT_faxcorp_tools(Menu):
         layout.operator(
             rename_by_collection.OBJECT_OT_faxcorp_rename_by_collection.bl_idname,
             icon="OUTLINER_COLLECTION",
+        )
+        layout.operator(
+            strip_dots_numbers.OBJECT_OT_faxcorp_strip_dots_numbers.bl_idname,
+            icon="FILE_TEXT",
         )
         layout.separator()
         layout.operator(
