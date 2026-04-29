@@ -80,6 +80,19 @@ dist/faxcorp_blender_tools-1.0.4.zip
 
 The zip is arranged for Blender's `Install from Disk...` flow.
 
+## Publishing A Release
+
+Releases can be published without remembering git commands:
+
+1. Push the version bump to `main`.
+2. Open the repository on GitHub.
+3. Go to `Actions > Release`.
+4. Click `Run workflow` on the `main` branch.
+
+The workflow reads `blender_manifest.toml`, builds the zip, creates the matching tag, and publishes the GitHub release.
+
+You can also publish by pushing a matching version tag such as `v1.0.4`.
+
 ## Source Notes
 
 This suite collects and reorganizes tools from older standalone scripts and add-ons. The original folders are left untouched.
