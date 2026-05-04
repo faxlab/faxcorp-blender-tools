@@ -24,6 +24,7 @@ $files = @(
     "__init__.py",
     "align_uv_islands.py",
     "axis_mesh_clipper.py",
+    "center_uv_islands.py",
     "blender_manifest.toml",
     "clear_custom_normals.py",
     "constants.py",

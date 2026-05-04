@@ -4,6 +4,7 @@ from bpy.types import Panel
 from . import (
     align_uv_islands,
     axis_mesh_clipper,
+    center_uv_islands,
     clear_custom_normals,
     layout_objects,
     rename_by_collection,
@@ -77,6 +78,7 @@ class FAXCORP_PT_uv_tools(FAXCORP_PT_tools_base, Panel):
             align_uv_islands.UV_OT_faxcorp_align_by_longest_edge.bl_idname,
             icon="UV",
         )
+        center_uv_islands.menu_checkbox_and_operator(self.layout, context.scene)
 
 
 class FAXCORP_PT_naming_tools(FAXCORP_PT_tools_base, Panel):

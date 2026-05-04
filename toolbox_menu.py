@@ -6,6 +6,7 @@ from . import (
     axis_mesh_clipper,
     clear_custom_normals,
     layout_objects,
+    center_uv_islands,
     rename_by_collection,
     rename_to_material,
     set_pivot,
@@ -51,6 +52,7 @@ class VIEW3D_MT_faxcorp_tools(Menu):
             align_uv_islands.UV_OT_faxcorp_align_by_longest_edge.bl_idname,
             icon="UV",
         )
+        center_uv_islands.menu_checkbox_and_operator(layout, context.scene)
 
 
 def draw_menu_button(layout):

@@ -10,6 +10,7 @@ One tidy Blender add-on containing Faxcorp utility tools.
 | Axis Mesh Clipper | Mesh | Opens a menu for clipping selected meshes by local axis. |
 | Rename to Material | Naming | Renames selected mesh objects from their material names, with optional split-by-material behavior. |
 | Align UV Islands by Longest Edge | UV | Rotates each UV island so its longest UV edge becomes horizontal. |
+| Center Selected UV Islands | UV | Moves selected UV islands to UV center. Use `Individually` to center each island independently (default on). |
 | Clear Split Normals | Mesh | Clears custom split normals on selected mesh objects. |
 | Layout Objects | Object | Places selected objects end-to-end along X, Y, or Z with a configurable gap. |
 | Set Pivot | Object | Moves selected mesh object pivots to local min, middle, max, or kept axis positions. |
@@ -22,7 +23,7 @@ One tidy Blender add-on containing Faxcorp utility tools.
 2. Go to `Edit > Preferences > Get Extensions`.
 3. Open the menu in the top-right corner.
 4. Choose `Install from Disk...`.
-5. Select `dist/faxcorp_blender_tools-1.0.4.zip`.
+5. Select `dist/faxcorp_blender_tools-1.0.6.zip`.
 6. Enable `Faxcorp Blender Tools`.
 
 ## Usage
@@ -45,6 +46,7 @@ Every shortcut is optional and disabled by default. In the add-on preferences, s
 - Set Pivot
 - Clear Split Normals
 - Align UV Islands
+- Center Selected UV Islands
 
 The key field expects Blender key event names such as `C`, `X`, `F5`, `SPACE`, or `TAB`. Leave the key field blank to remove that shortcut.
 
@@ -75,7 +77,7 @@ Run this from the repo root:
 The script creates:
 
 ```text
-dist/faxcorp_blender_tools-1.0.4.zip
+dist/faxcorp_blender_tools-1.0.6.zip
 ```
 
 The zip is arranged for Blender's `Install from Disk...` flow.
@@ -91,7 +93,7 @@ Releases can be published without remembering git commands:
 
 The workflow reads `blender_manifest.toml`, builds the zip, creates the matching tag, and publishes the GitHub release.
 
-You can also publish by pushing a matching version tag such as `v1.0.4`.
+You can also publish by pushing a matching version tag such as `v1.0.6`.
 
 ## Source Notes
 

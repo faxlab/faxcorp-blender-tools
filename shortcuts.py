@@ -16,6 +16,7 @@ SHORTCUT_ACTIONS = (
     ("set_pivot", "Set Pivot", "object.faxcorp_set_pivot_dialog", {}),
     ("clear_normals", "Clear Split Normals", "mesh.faxcorp_clear_split_normals", {}),
     ("align_uv", "Align UV Islands", "uv.faxcorp_align_by_longest_edge", {}),
+    ("center_uv", "Center Selected UV Islands", "uv.faxcorp_center_selected_islands", {}),
 )
 
 

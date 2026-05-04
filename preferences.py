@@ -16,6 +16,7 @@ SHORTCUT_ROWS = (
     ("set_pivot", "Set Pivot"),
     ("clear_normals", "Clear Split Normals"),
     ("align_uv", "Align UV Islands"),
+    ("center_uv", "Center Selected UV Islands"),
 )
 
 
@@ -128,6 +129,12 @@ class FAXCORP_AddonPreferences(AddonPreferences):
     align_uv_shortcut_shift: modifier_property("Shift")
     align_uv_shortcut_alt: modifier_property("Alt")
     align_uv_shortcut_oskey: modifier_property("OSKey")
+
+    center_uv_shortcut_key: key_property("Center Selected UV Islands")
+    center_uv_shortcut_ctrl: modifier_property("Ctrl")
+    center_uv_shortcut_shift: modifier_property("Shift")
+    center_uv_shortcut_alt: modifier_property("Alt")
+    center_uv_shortcut_oskey: modifier_property("OSKey")
 
     def draw(self, context):
         layout = self.layout
