@@ -77,17 +77,21 @@ def uv_loop_selected(loop, uv_layer):
     return bool(getattr(uv_data, "select", False) or getattr(uv_data, "select_edge", False))
 
 
-def island_is_selected(island, uv_layer):
+def mesh_loop_selected(loop):
+    return bool(loop.face.select or loop.vert.select or loop.edge.select)
+
+
+def island_is_selected(island, uv_layer, use_mesh_selection):
     for face in island:
-        if face.select:
-            return True
         for loop in face.loops:
             if uv_loop_selected(loop, uv_layer):
+                return True
+            if use_mesh_selection and mesh_loop_selected(loop):
                 return True
     return False
 
 
-def selected_island_loops(bm, respect_selection):
+def selected_island_loops(bm, respect_selection, use_mesh_selection):
     uv_layer = active_uv_layer(bm)
     all_island_loops = []
     selected_island_loops = []
@@ -98,13 +102,13 @@ def selected_island_loops(bm, respect_selection):
             for loop in face.loops:
                 loops.append(loop)
         all_island_loops.append(loops)
-        if island_is_selected(island, uv_layer):
+        if island_is_selected(island, uv_layer, use_mesh_selection):
             selected_island_loops.append(loops)
 
     if not all_island_loops:
         return uv_layer, []
 
-    if not respect_selection or not selected_island_loops:
+    if not respect_selection:
         return uv_layer, all_island_loops
 
     return uv_layer, selected_island_loops
@@ -122,11 +126,15 @@ def representative_for_group(group):
     return next((obj for obj in group if obj.mode == "EDIT"), group[0])
 
 
-def collect_target(obj, respect_selection):
+def collect_target(obj, respect_selection, use_mesh_selection):
     if obj.mode == "EDIT":
         bm = bmesh.from_edit_mesh(obj.data)
         bm.faces.ensure_lookup_table()
-        uv_layer, island_loops = selected_island_loops(bm, respect_selection=True)
+        uv_layer, island_loops = selected_island_loops(
+            bm,
+            respect_selection=respect_selection,
+            use_mesh_selection=use_mesh_selection,
+        )
         return {
             "mesh": obj.data,
             "bm": bm,
@@ -140,7 +148,11 @@ def collect_target(obj, respect_selection):
     try:
         bm.from_mesh(obj.data)
         bm.faces.ensure_lookup_table()
-        uv_layer, island_loops = selected_island_loops(bm, respect_selection=respect_selection)
+        uv_layer, island_loops = selected_island_loops(
+            bm,
+            respect_selection=respect_selection,
+            use_mesh_selection=use_mesh_selection,
+        )
         return {
             "mesh": obj.data,
             "bm": bm,
@@ -215,6 +227,29 @@ def free_owned_targets(targets):
             target["bm"].free()
 
 
+def collect_targets(objects, respect_selection, use_mesh_selection):
+    targets = []
+    warnings = []
+    for group in groups_by_mesh(objects):
+        representative = representative_for_group(group)
+        try:
+            target = collect_target(
+                representative,
+                respect_selection=respect_selection,
+                use_mesh_selection=use_mesh_selection,
+            )
+        except RuntimeError as exc:
+            warnings.append((representative, exc))
+            continue
+
+        if target["island_loops"]:
+            targets.append(target)
+        elif target["owned"]:
+            target["bm"].free()
+
+    return targets, warnings
+
+
 class UV_OT_faxcorp_center_selected_islands(Operator):
     bl_idname = "uv.faxcorp_center_selected_islands"
     bl_label = "Center Selected UV Islands"
@@ -235,22 +270,24 @@ class UV_OT_faxcorp_center_selected_islands(Operator):
 
         targets = []
         try:
-            for group in groups_by_mesh(selected):
-                representative = representative_for_group(group)
-                try:
-                    target = collect_target(
-                        representative,
-                        respect_selection=(representative.mode == "EDIT"),
-                    )
-                except RuntimeError as exc:
-                    self.report({"WARNING"}, f"Could not process {representative.name}: {exc}")
-                    continue
+            use_mesh_selection = bool(getattr(context.tool_settings, "use_uv_select_sync", False))
+            targets, warnings = collect_targets(
+                selected,
+                respect_selection=True,
+                use_mesh_selection=use_mesh_selection,
+            )
+            for representative, exc in warnings:
+                self.report({"WARNING"}, f"Could not process {representative.name}: {exc}")
 
-                if target["island_loops"]:
-                    targets.append(target)
-                else:
-                    if target["owned"]:
-                        target["bm"].free()
+            if not targets or combined_island_count(targets) == 0:
+                free_owned_targets(targets)
+                targets, warnings = collect_targets(
+                    selected,
+                    respect_selection=False,
+                    use_mesh_selection=use_mesh_selection,
+                )
+                for representative, exc in warnings:
+                    self.report({"WARNING"}, f"Could not process {representative.name}: {exc}")
 
             if not targets or combined_island_count(targets) == 0:
                 self.report({"WARNING"}, "No UV islands found to center")
