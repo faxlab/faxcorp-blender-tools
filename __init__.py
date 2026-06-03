@@ -1,8 +1,7 @@
 bl_info = {
     "name": "Faxcorp Blender Tools",
     "author": "faxcorp",
-    "version": (1, 0, 5),
-    "version": (1, 0, 6),
+    "version": (1, 0, 8),
     "blender": (5, 1, 1),
     "location": "View3D > Sidebar > Faxcorp Tools",
     "description": "A tidy toolbox of Faxcorp Blender utilities",
@@ -12,8 +11,8 @@ bl_info = {
 from . import (
     align_uv_islands,
     axis_mesh_clipper,
-    center_uv_islands,
     clear_custom_normals,
+    fit_uv_bounds,
     layout_objects,
     panels,
     preferences,
@@ -31,7 +30,7 @@ modules = (
     axis_mesh_clipper,
     rename_to_material,
     align_uv_islands,
-    center_uv_islands,
+    fit_uv_bounds,
     clear_custom_normals,
     layout_objects,
     rename_by_collection,

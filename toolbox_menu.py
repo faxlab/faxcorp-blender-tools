@@ -5,8 +5,8 @@ from . import (
     align_uv_islands,
     axis_mesh_clipper,
     clear_custom_normals,
+    fit_uv_bounds,
     layout_objects,
-    center_uv_islands,
     rename_by_collection,
     rename_to_material,
     set_pivot,
@@ -52,7 +52,12 @@ class VIEW3D_MT_faxcorp_tools(Menu):
             align_uv_islands.UV_OT_faxcorp_align_by_longest_edge.bl_idname,
             icon="UV",
         )
-        center_uv_islands.menu_checkbox_and_operator(layout, context.scene)
+        previous_context = layout.operator_context
+        layout.operator_context = "INVOKE_DEFAULT"
+        layout.operator(
+            fit_uv_bounds.UV_OT_faxcorp_fit_uv_bounds.bl_idname,
+        )
+        layout.operator_context = previous_context
 
 
 def draw_menu_button(layout):
